@@ -1,0 +1,42 @@
+
+
+.logged  { font-family:open sans; }
+.logged h3{ font-family:open sans; font-weight:700; font-size:30px; }
+
+.btns-mink {
+	margin-top: 50px;
+}
+
+.btns-mink ul { list-style:none; }
+.btns-mink ul li {
+    display: inline-block;
+    padding: 0 10px;
+}
+.btns-mink ul li a{ display:inline-block; background:#444; color:#fff; padding:10px 10px; border-radius:10px; font-size:20px; width:250px; }
+
+.mrt-30 { margin-top:30px; }
+
+.social_ling_bg > a {
+    padding: 0 4px;
+}
+.social_ling_bg .social_icon {
+	background: #ad0b11 none repeat scroll 0 0;
+	border-radius: 50%;
+	-webkit-border-radius: 5px;
+	-ms-border-radius: 50%;
+	-moz-border-radius: 50%;
+	color: #fff;
+	height: 40px;
+	padding: 9px;
+	width: 40px;
+	cursor: pointer;
+	font-size: 25px;
+	transition: 0.5s;
+}
+.social_icon:hover {
+	background: #42753d;
+}
+.btns-mink ul li a:hover {
+	text-decoration: none;
+	background:#ad0b11;
+}
