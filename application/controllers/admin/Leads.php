@@ -452,6 +452,10 @@ class Leads extends Admin_Controller
     public
     function saved_leads($id = NULL)
     {
+		/* echo '<pre>';
+			print_r($_POST);
+		echo '</pre>';
+		die; */
         $created = can_action('55', 'created');
         $edited = can_action('55', 'edited');
         if (!empty($created) || !empty($edited) && !empty($id)) {
@@ -467,7 +471,8 @@ class Leads extends Admin_Controller
             } else { // if id is not exist then set id as null
                 $leads_id = null;
             }
-
+			/* print_r($data);
+				die; */
             // check whether this input data already exist or not
             $check_leads = $this->items_model->check_update('tbl_leads', $where, $leads_id);
             if (!empty($check_leads)) { // if input data already exist show error alert
@@ -503,8 +508,16 @@ class Leads extends Admin_Controller
                         redirect($_SERVER['HTTP_REFERER']);
                     }
                 }
-                $return_id = $this->items_model->save($data, $id);
+				//print_r($_POST['lead_category']);
+				/* implode array */
+				$data['lead_category'] = implode(',',$_POST['lead_category']);
+                $return_id = $this->items_model->save($data, $id); 
 
+ /* explode array */
+				$leads_cat = $this->items_model->check_by(array('leads_id' => $id), 'tbl_leads');
+				$lead_cat = $leads_cat->lead_category;
+				$u_data['lead_category'] = explode(',',$lead_cat);
+				/* print_r($u_data['lead_category']); die; */
                 if (!empty($id)) {
                     $id = $id;
                     $action = 'activity_update_leads';
@@ -519,7 +532,7 @@ class Leads extends Admin_Controller
                 $u_data['index_no'] = $id;
                 $id = $this->items_model->save($u_data, $id);
 
-                save_custom_field(5, $id);
+                save_custom_field(5, $id); 
                 $activity = array(
                     'user' => $this->session->userdata('user_id'),
                     'module' => 'leads',
@@ -529,9 +542,9 @@ class Leads extends Admin_Controller
                     'link' => 'admin/leads/leads_details/' . $id,
                     'value1' => $data['lead_name']
                 );
-                $this->items_model->_table_name = 'tbl_activities';
+                $this->items_model->_table_name = 'tbl_activities'; 
                 $this->items_model->_primary_key = 'activities_id';
-                $this->items_model->save($activity);
+                $this->items_model->save($activity); 
                 // messages for user
                 $type = "success";
 
@@ -544,7 +557,7 @@ class Leads extends Admin_Controller
                     }
                 } else {
                     $notifiedUsers = $this->items_model->allowed_user_id('55');
-                }
+                } 
                 if (!empty($notifiedUsers)) {
                     foreach ($notifiedUsers as $users) {
                         if ($users != $this->session->userdata('user_id')) {
@@ -559,7 +572,7 @@ class Leads extends Admin_Controller
                     }
                     show_notification($notifiedUsers);
                 }
-            }
+            } //die('nghf');
             $message = $msg;
             set_message($type, $message);
         }

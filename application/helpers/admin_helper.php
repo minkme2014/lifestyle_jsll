@@ -716,7 +716,6 @@ function custom_form_Fields($id, $edit_id = null, $col_sm = null)
                 </div>';
                 }
                 if ($v_fileds->field_type == 'dropdown' && $v_fileds->status == 'active') {
-
                     $html .= '<div class="form-group">
                 <label class="' . $col . ' control-label">' . $v_fileds->field_label . ' ' . $l_required . '  ' . $help_text . '</label>
                 <div class="col-lg-5">
@@ -812,16 +811,32 @@ function custom_form_Fields($id, $edit_id = null, $col_sm = null)
                 </div>';
                 }
                 if ($v_fileds->field_type == 'dropdown' && $v_fileds->status == 'active') {
+				
+					if($name == "lead_category")
+					{
+						$cat ="multiple";
+						$html .= '<div class="form-group">
+						<label class="' . $col . ' control-label">' . $v_fileds->field_label . ' ' . $l_required . '  ' . $help_text . '</label>
+						<div class="col-lg-5">
+						<select '.$cat.' name="' . $name . '[]" class="form-control select_box '.$name.'" style="width:100%" ' . $required . '>
+						' . dropdownField($v_fileds->default_value, $value) . '
 
-                    $html .= '<div class="form-group">
-                <label class="' . $col . ' control-label">' . $v_fileds->field_label . ' ' . $l_required . '  ' . $help_text . '</label>
-                <div class="col-lg-5">
-                <select name="' . $name . '" class="form-control select_box" style="width:100%" ' . $required . '>
-                ' . dropdownField($v_fileds->default_value, $value) . '
+						</select>
+						</div>
+						</div>';
+					}else{
+						$cat ="";
+						$html .= '<div class="form-group">
+						<label class="' . $col . ' control-label">' . $v_fileds->field_label . ' ' . $l_required . '  ' . $help_text . '</label>
+						<div class="col-lg-5">
+						<select '.$cat.' name="' . $name . '" class="form-control select_box '.$name.'" style="width:100%" ' . $required . '>
+						' . dropdownField($v_fileds->default_value, $value) . '
 
-                </select>
-                </div>
-                </div>';
+						</select>
+						</div>
+						</div>';
+					}
+                    
                 }
                 if ($v_fileds->field_type == 'date' && $v_fileds->status == 'active') {
 
@@ -868,16 +883,36 @@ function custom_form_Fields($id, $edit_id = null, $col_sm = null)
 
 
 function dropdownField($value, $editValue = null)
-{
+{ 
     $html = null;
-    foreach (json_decode($value) as $optionValue) {
-        $html .= '<option value="' . $optionValue . '" ' . (!empty($editValue) && $editValue == $optionValue ? "selected" : null) . '>' . $optionValue . '</option>';
+/* 	$html .= '<option value = "">Select Option</option>';
+ */    foreach (json_decode($value) as $optionValue) {
+		
+		if($optionValue == "Railway")
+		{
+			$optionVal = "0";		
+			$html .= '<option value="' . $optionVal . '" ' . (!empty($editValue) && $editValue == $optionVal ? "selected" : null) . '>' . $optionValue . '</option>';
+		}else if($optionValue == "OEM & Sanitation")
+		{
+			$optionVal = "1";
+			$html .= '<option value="' . $optionVal . '" ' . (!empty($editValue) && $editValue == $optionVal ? "selected" : null) . '>' . $optionValue . '</option>';
+		}else if($optionValue == "Kitchen")
+		{
+			$optionVal = "2";
+			$html .= '<option value="' . $optionVal . '" ' . (!empty($editValue) && $editValue == $optionVal ? "selected" : null) . '>' . $optionValue . '</option>';
+		}else if($optionValue == "Infra")
+		{
+			$optionVal = "3";
+			$html .= '<option value="' . $optionVal . '" ' . (!empty($editValue) && $editValue == $optionVal ? "selected" : null) . '>' . $optionValue . '</option>';
+		}else{
+			$html .= '<option value="' . $optionValue . '" ' . (!empty($editValue) && $editValue == $optionValue ? "selected" : null) . '>' . $optionValue . '</option>';
+		}
     }
     return $html;
 }
 
 function save_custom_field($id, $edit_id = null)
-{
+{ 
     $CI = &get_instance();
     $CI->load->model('admin_model');
 
@@ -886,9 +921,9 @@ function save_custom_field($id, $edit_id = null)
     $table = $form->tbl_name;
     $table_id = $form->table_id;
     $custom = array();
-    if (!empty($all_field)) {
+    if (!empty($all_field)) {		
         foreach ($all_field as $v_fileds) {
-            if (!empty($v_fileds->visible_for_admin) && empty(client())) {
+			if (!empty($v_fileds->visible_for_admin) && empty(client())) {
                 if (!empty(admin())) {
                     $name = slug_it($v_fileds->field_label);
                     $custom[$name] = $CI->input->post($name, true);
